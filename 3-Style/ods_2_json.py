@@ -215,11 +215,15 @@ three_style["3TWISTS"] = process(None, three_twists, PIECES_3_TWISTS_1, PIECES_3
 # Z: [X, Y]
 # Instead of:
 # [Z: [X, Y]]
-# Some are also missing opening or closing brackets
+# Some are missing opening or closing brackets
+# [Z: [X, Y]
+# Some have redundant brackets:
+# [[Z: [X, Y]]]
 def correct_result(data):
     no_brackets = re.compile(r'\[.*:')
     left_heavy = re.compile(r'\[.*(?!\])\[.*\]')
     right_heavy = re.compile(r'\[.*\].*(?!\[)\]')
+    redundant = re.compile(r'\[(\[.*\])\]')
     for key, value in data.items():
         for i, comm in enumerate(value):
             if ":" in comm["comm"]:
@@ -230,6 +234,9 @@ def correct_result(data):
                     data[key][i]["comm"] = f"{comm['comm']}]"
                 elif right_heavy.search(comm["comm"]):
                     data[key][i]["comm"] = f"[{comm['comm']}"
+            if search := redundant.search(comm["comm"]):
+                data[key][i]["comm"] = search.group(1)
+
 
 correct_result(three_style)
 

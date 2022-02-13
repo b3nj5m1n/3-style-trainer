@@ -475,7 +475,7 @@
       "piece_2": "W"
     },
     {
-      "comm": "[[L F' L' , S]]",
+      "comm": "[L F' L' , S]",
       "type": "S-Swap",
       "piece_1": "E",
       "piece_2": "X"
@@ -1555,7 +1555,7 @@
       "piece_2": "W"
     },
     {
-      "comm": "[[R F R' , S']]",
+      "comm": "[R F R' , S']",
       "type": "S-Swap",
       "piece_1": "O",
       "piece_2": "X"
@@ -2455,7 +2455,7 @@
       "piece_2": "K"
     },
     {
-      "comm": "[[U L' U' , M2']]",
+      "comm": "[U L' U' , M2']",
       "type": "M-Swap",
       "piece_1": "W",
       "piece_2": "L"
@@ -3033,7 +3033,7 @@
       "piece_2": "P"
     },
     {
-      "comm": "[[R' , F' L F]]",
+      "comm": "[R' , F' L F]",
       "type": "U-Any / U-Any",
       "piece_1": "E",
       "piece_2": "Q"
