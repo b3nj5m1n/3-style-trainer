@@ -1,6 +1,7 @@
 import argparse
 import json
 import pandas as pd
+import re
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', dest='input', required=True)
@@ -209,6 +210,20 @@ three_style["PARITY"] = process_parity(parity, PIECES_PARITY)
 three_style["2FLIPS"] = process(None, two_flips, PIECES_2_FLIPS_1, PIECES_2_FLIPS_2, False)
 three_style["2TWISTS"] = process(None, two_twists, PIECES_2_TWISTS_1, PIECES_2_TWISTS_2, False)
 three_style["3TWISTS"] = process(None, three_twists, PIECES_3_TWISTS_1, PIECES_3_TWISTS_2, False)
+
+# Some (~ 10 or so) comms have this format:
+# Z: [X, Y]
+# Instead of:
+# [Z: [X, Y]]
+def correct_result(data):
+    regexp = re.compile(r'\[.*:')
+    for key, value in data.items():
+        for i, comm in enumerate(value):
+            if ":" in comm["comm"]:
+                if not regexp.search(comm["comm"]):
+                    data[key][i]["comm"] = f"[{comm['comm']}]"
+
+correct_result(three_style)
 
 with open(args.output, "w") as outfile:
     outfile.write(json.dumps(three_style, indent=2))

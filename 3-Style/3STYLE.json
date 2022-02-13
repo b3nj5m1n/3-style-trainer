@@ -445,7 +445,7 @@
       "piece_2": "R"
     },
     {
-      "comm": "M' : (U M' U M)2",
+      "comm": "[M' : (U M' U M)2]",
       "type": "Alg",
       "piece_1": "E",
       "piece_2": "S"
@@ -1285,7 +1285,7 @@
       "piece_2": "R"
     },
     {
-      "comm": "M' : (U' M' U' M)2",
+      "comm": "[M' : (U' M' U' M)2]",
       "type": "Alg",
       "piece_1": "M",
       "piece_2": "S"
@@ -1939,7 +1939,7 @@
       "piece_2": "D"
     },
     {
-      "comm": "M2' : (U' M U' M')2",
+      "comm": "[M2' : (U' M U' M')2]",
       "type": "Alg",
       "piece_1": "S",
       "piece_2": "E"
@@ -1981,7 +1981,7 @@
       "piece_2": "L"
     },
     {
-      "comm": "M2' : (U M U M')2",
+      "comm": "[M2' : (U M U M')2]",
       "type": "Alg",
       "piece_1": "S",
       "piece_2": "M"
@@ -3399,7 +3399,7 @@
       "piece_2": "W"
     },
     {
-      "comm": "R' D R U' R : [F , R' U R U']",
+      "comm": "[R' D R U' R : [F , R' U R U']]",
       "type": "U-Any / U-Any",
       "piece_1": "I",
       "piece_2": "A"
@@ -4926,7 +4926,7 @@
     },
     {
       "piece": "E (LUB)",
-      "comm": "U R' U' : [UBR (B) Parity]"
+      "comm": "[U R' U' : [UBR (B) Parity]]"
     },
     {
       "piece": "F (LUF)",
@@ -4934,23 +4934,23 @@
     },
     {
       "piece": "G (LDF)",
-      "comm": "D U R U' : [UBR (B) Parity]"
+      "comm": "[D U R U' : [UBR (B) Parity]]"
     },
     {
       "piece": "H (LDB)",
-      "comm": "R D' R' : [UBR (B) Parity]"
+      "comm": "[R D' R' : [UBR (B) Parity]]"
     },
     {
       "piece": "I (FUL)",
-      "comm": "L : [DFL (U) Parity]"
+      "comm": "[L : [DFL (U) Parity]]"
     },
     {
       "piece": "K (FDR)",
-      "comm": "U R U' : [UBR (B) Parity]"
+      "comm": "[U R U' : [UBR (B) Parity]]"
     },
     {
       "piece": "L (FDL)",
-      "comm": "D : [RDF (P) Parity]"
+      "comm": "[D : [RDF (P) Parity]]"
     },
     {
       "piece": "N (RUB)",
@@ -4958,7 +4958,7 @@
     },
     {
       "piece": "O (RDB)",
-      "comm": "D' U R U' : [UBR (B) Parity]"
+      "comm": "[D' U R U' : [UBR (B) Parity]]"
     },
     {
       "piece": "P (RDF)",
@@ -4970,15 +4970,15 @@
     },
     {
       "piece": "R (BUL)",
-      "comm": "L : [UFL (D) Parity]"
+      "comm": "[L : [UFL (D) Parity]]"
     },
     {
       "piece": "S (BDL)",
-      "comm": "U' L U : [UBR (B) Parity]"
+      "comm": "[U' L U : [UBR (B) Parity]]"
     },
     {
       "piece": "T (BDR)",
-      "comm": "D' : [RDF (P) Parity]"
+      "comm": "[D' : [RDF (P) Parity]]"
     },
     {
       "piece": "U (DFL)",
@@ -4986,15 +4986,15 @@
     },
     {
       "piece": "V (DFR)",
-      "comm": "D U R2 U' : [UBR (B) Parity]"
+      "comm": "[D U R2 U' : [UBR (B) Parity]]"
     },
     {
       "piece": "W (DBR)",
-      "comm": "U R2 U' : [UBR (B) Parity]"
+      "comm": "[U R2 U' : [UBR (B) Parity]]"
     },
     {
       "piece": "X (DBL)",
-      "comm": "D' U R2 U' : [UBR (B) Parity]"
+      "comm": "[D' U R2 U' : [UBR (B) Parity]]"
     }
   ],
   "2FLIPS": [
