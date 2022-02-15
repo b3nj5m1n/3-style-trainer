@@ -3,7 +3,7 @@ import { Alg } from "cubing/alg";
 import { puzzles } from "cubing/puzzles";
 import { experimentalSolve3x3x3IgnoringCenters } from "cubing/search";
 import { TwistyPlayer } from "cubing/twisty";
-const data = require("./3STYLE.json")
+const data = require("../3-Style/3STYLE.json")
 
 var app = Elm.Main.init({
     node: document.getElementById("root"),
