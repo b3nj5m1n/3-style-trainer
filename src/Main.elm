@@ -599,6 +599,87 @@ viewComm c settings =
                     [ text (comm.piece1 ++ " -> " ++ comm.piece2) ]
                 ]
 
+            UFR (Just comm) ->
+                [ span
+                    [ class
+                        (if settings.comm_type_visible == True then
+                            ""
+
+                         else
+                            "blur-lg"
+                        )
+                    , onClick ToggleCommTypeVisible
+                    ]
+                    [ text (comm.comm_type ++ ": ") ]
+                , span
+                    [ class
+                        (if settings.letters_visible == True then
+                            ""
+
+                         else
+                            "blur-md"
+                        )
+                    , onClick ToggleLettersVisible
+                    ]
+                    [ text (comm.piece1 ++ " -> " ++ comm.piece2) ]
+                ]
+
+            Parity (Just comm) ->
+                [ span
+                    [ class
+                        (if settings.letters_visible == True then
+                            ""
+
+                         else
+                            "blur-md"
+                        )
+                    , onClick ToggleLettersVisible
+                    ]
+                    [ text comm.piece ]
+                ]
+
+            TwoFlips (Just comm) ->
+                [ span
+                    [ class
+                        (if settings.letters_visible == True then
+                            ""
+
+                         else
+                            "blur-md"
+                        )
+                    , onClick ToggleLettersVisible
+                    ]
+                    [ text (comm.piece1 ++ " -> " ++ comm.piece2) ]
+                ]
+
+            TwoTwists (Just comm) ->
+                [ span
+                    [ class
+                        (if settings.letters_visible == True then
+                            ""
+
+                         else
+                            "blur-md"
+                        )
+                    , onClick ToggleLettersVisible
+                    ]
+                    [ text (comm.piece1 ++ " -> " ++ comm.piece2) ]
+                ]
+
+            ThreeTwists (Just comm) ->
+                [ span
+                    [ class
+                        (if settings.letters_visible == True then
+                            ""
+
+                         else
+                            "blur-md"
+                        )
+                    , onClick ToggleLettersVisible
+                    ]
+                    [ text (comm.piece1 ++ " -> " ++ comm.piece2) ]
+                ]
+
             _ ->
                 [ span [] [ text ": " ] ]
         )
