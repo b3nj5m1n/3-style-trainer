@@ -7,6 +7,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder)
+import Json.Decode.Pipeline
 import Random
 import Task
 import Url
@@ -202,12 +203,44 @@ decoderToggledTypes =
         (Json.Decode.field "three_twists" Json.Decode.bool)
 
 
+decoderToggledCasesUF : Decoder ToggledCasesUF
+decoderToggledCasesUF =
+    Json.Decode.map8
+        ToggledCasesUF
+        (Json.Decode.field "four_mover" Json.Decode.bool)
+        (Json.Decode.field "u_swap" Json.Decode.bool)
+        (Json.Decode.field "e_swap" Json.Decode.bool)
+        (Json.Decode.field "s_swap" Json.Decode.bool)
+        (Json.Decode.field "m_swap" Json.Decode.bool)
+        (Json.Decode.field "alg" Json.Decode.bool)
+        (Json.Decode.field "f_swap" Json.Decode.bool)
+        (Json.Decode.field "s_insert" Json.Decode.bool)
+
+
+decoderToggledCasesUFR : Decoder ToggledCasesUFR
+decoderToggledCasesUFR =
+    Json.Decode.succeed
+        ToggledCasesUFR
+        |> Json.Decode.Pipeline.required "u_any__u_any" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "u_top__d_side" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "u_top__d_bottom" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "special" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "u_side__d_any" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "luf_d__any" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "bur__d_any" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "d_side__d_side" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "d_side__d_bottom" Json.Decode.bool
+        |> Json.Decode.Pipeline.required "d_bottom__d_bottom" Json.Decode.bool
+
+
 decoderSettings : Decoder Settings
 decoderSettings =
     Json.Decode.field "settings"
-        (Json.Decode.map4
+        (Json.Decode.map6
             Settings
             (Json.Decode.field "toggled_types" decoderToggledTypes)
+            (Json.Decode.field "toggled_cases_uf" decoderToggledCasesUF)
+            (Json.Decode.field "toggled_cases_ufr" decoderToggledCasesUFR)
             (Json.Decode.field "comm_visible" Json.Decode.bool)
             (Json.Decode.field "comm_type_visible" Json.Decode.bool)
             (Json.Decode.field "letters_visible" Json.Decode.bool)
@@ -242,6 +275,32 @@ type alias ToggledTypes =
     , two_flips : Bool
     , two_twists : Bool
     , three_twists : Bool
+    }
+
+
+type alias ToggledCasesUF =
+    { four_mover : Bool
+    , u_swap : Bool
+    , e_swap : Bool
+    , s_swap : Bool
+    , m_swap : Bool
+    , alg : Bool
+    , f_swap : Bool
+    , s_insert : Bool
+    }
+
+
+type alias ToggledCasesUFR =
+    { u_any__u_any : Bool
+    , u_top__d_side : Bool
+    , u_top__d_bottom : Bool
+    , special : Bool
+    , u_side__d_any : Bool
+    , luf_d__any : Bool
+    , bur__d_any : Bool
+    , d_side__d_side : Bool
+    , d_side__d_bottom : Bool
+    , d_bottom__d_bottom : Bool
     }
 
 
@@ -294,6 +353,8 @@ toggleType type_to_toggle current =
 
 type alias Settings =
     { toggled_types : ToggledTypes
+    , toggled_cases_uf : ToggledCasesUF
+    , toggled_cases_ufr : ToggledCasesUFR
     , comm_visible : Bool
     , comm_type_visible : Bool
     , letters_visible : Bool
@@ -378,6 +439,28 @@ init flags url key =
                                 , two_flips = False
                                 , two_twists = False
                                 , three_twists = False
+                                }
+                            , toggled_cases_uf =
+                                { four_mover = False
+                                , u_swap = False
+                                , e_swap = False
+                                , s_swap = False
+                                , m_swap = False
+                                , alg = False
+                                , f_swap = False
+                                , s_insert = False
+                                }
+                            , toggled_cases_ufr =
+                                { u_any__u_any = False
+                                , u_top__d_side = False
+                                , u_top__d_bottom = False
+                                , special = False
+                                , u_side__d_any = False
+                                , luf_d__any = False
+                                , bur__d_any = False
+                                , d_side__d_side = False
+                                , d_side__d_bottom = False
+                                , d_bottom__d_bottom = False
                                 }
                             , comm_visible = False
                             , comm_type_visible = False
