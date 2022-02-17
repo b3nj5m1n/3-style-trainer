@@ -642,10 +642,6 @@ isValidCaseUF toggled_cases comm =
             toggled_cases.s_insert
 
         _ ->
-            let
-                _ =
-                    Debug.log "Unkown UF case type." comm
-            in
             False
 
 
@@ -683,10 +679,6 @@ isValidCaseUFR toggled_cases comm =
             toggled_cases.d_bottom__d_bottom
 
         _ ->
-            let
-                _ =
-                    Debug.log "Unkown UF case type." comm
-            in
             False
 
 
