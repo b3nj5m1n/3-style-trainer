@@ -290,6 +290,45 @@ type alias ToggledCasesUF =
     }
 
 
+type CaseUF
+    = FourMover
+    | USwap
+    | ESwap
+    | SSwap
+    | MSwap
+    | Alg
+    | FSwap
+    | SInsert
+
+
+toggleCasesUF : CaseUF -> ToggledCasesUF -> ToggledCasesUF
+toggleCasesUF case_to_toggle current =
+    case case_to_toggle of
+        FourMover ->
+            { current | four_mover = not current.four_mover }
+
+        USwap ->
+            { current | u_swap = not current.u_swap }
+
+        ESwap ->
+            { current | e_swap = not current.e_swap }
+
+        SSwap ->
+            { current | s_swap = not current.s_swap }
+
+        MSwap ->
+            { current | m_swap = not current.m_swap }
+
+        Alg ->
+            { current | alg = not current.alg }
+
+        FSwap ->
+            { current | f_swap = not current.f_swap }
+
+        SInsert ->
+            { current | s_insert = not current.s_insert }
+
+
 type alias ToggledCasesUFR =
     { u_any__u_any : Bool
     , u_top__d_side : Bool
@@ -302,6 +341,53 @@ type alias ToggledCasesUFR =
     , d_side__d_bottom : Bool
     , d_bottom__d_bottom : Bool
     }
+
+
+type CaseUFR
+    = UAnyUAny
+    | UTopDSide
+    | UTopDBottom
+    | Special
+    | USideDAny
+    | LUFDAny
+    | BURDAny
+    | DSideDSide
+    | DSideDBottom
+    | DBottomDBottom
+
+
+toggleCasesUFR : CaseUFR -> ToggledCasesUFR -> ToggledCasesUFR
+toggleCasesUFR case_to_toggle current =
+    case case_to_toggle of
+        UAnyUAny ->
+            { current | u_any__u_any = not current.u_any__u_any }
+
+        UTopDSide ->
+            { current | u_top__d_side = not current.u_top__d_side }
+
+        UTopDBottom ->
+            { current | u_top__d_bottom = not current.u_top__d_bottom }
+
+        Special ->
+            { current | special = not current.special }
+
+        USideDAny ->
+            { current | u_side__d_any = not current.u_side__d_any }
+
+        LUFDAny ->
+            { current | luf_d__any = not current.luf_d__any }
+
+        BURDAny ->
+            { current | bur__d_any = not current.bur__d_any }
+
+        DSideDSide ->
+            { current | d_side__d_side = not current.d_side__d_side }
+
+        DSideDBottom ->
+            { current | d_side__d_bottom = not current.d_side__d_bottom }
+
+        DBottomDBottom ->
+            { current | d_bottom__d_bottom = not current.d_bottom__d_bottom }
 
 
 getComm : Maybe CommType -> Maybe String
@@ -364,6 +450,16 @@ type alias Settings =
 setToggledTypes : ToggledTypes -> Settings -> Settings
 setToggledTypes new_toggled_types settings =
     { settings | toggled_types = new_toggled_types }
+
+
+setToggledCasesUF : ToggledCasesUF -> Settings -> Settings
+setToggledCasesUF new_toggled_cases settings =
+    { settings | toggled_cases_uf = new_toggled_cases }
+
+
+setToggledCasesUFR : ToggledCasesUFR -> Settings -> Settings
+setToggledCasesUFR new_toggled_cases settings =
+    { settings | toggled_cases_ufr = new_toggled_cases }
 
 
 setCommVisible : Bool -> Settings -> Settings
@@ -433,34 +529,34 @@ init flags url key =
                         { data = decodedData
                         , settings =
                             { toggled_types =
-                                { uf = False
-                                , ufr = False
+                                { uf = True
+                                , ufr = True
                                 , parity = False
                                 , two_flips = False
                                 , two_twists = False
                                 , three_twists = False
                                 }
                             , toggled_cases_uf =
-                                { four_mover = False
-                                , u_swap = False
-                                , e_swap = False
-                                , s_swap = False
-                                , m_swap = False
-                                , alg = False
-                                , f_swap = False
-                                , s_insert = False
+                                { four_mover = True
+                                , u_swap = True
+                                , e_swap = True
+                                , s_swap = True
+                                , m_swap = True
+                                , alg = True
+                                , f_swap = True
+                                , s_insert = True
                                 }
                             , toggled_cases_ufr =
-                                { u_any__u_any = False
-                                , u_top__d_side = False
-                                , u_top__d_bottom = False
-                                , special = False
-                                , u_side__d_any = False
-                                , luf_d__any = False
-                                , bur__d_any = False
-                                , d_side__d_side = False
-                                , d_side__d_bottom = False
-                                , d_bottom__d_bottom = False
+                                { u_any__u_any = True
+                                , u_top__d_side = True
+                                , u_top__d_bottom = True
+                                , special = True
+                                , u_side__d_any = True
+                                , luf_d__any = True
+                                , bur__d_any = True
+                                , d_side__d_side = True
+                                , d_side__d_bottom = True
+                                , d_bottom__d_bottom = True
                                 }
                             , comm_visible = False
                             , comm_type_visible = False
@@ -493,6 +589,8 @@ type Msg
     | ToggleCommVisible
     | ToggleCommTypeVisible
     | ToggleLettersVisible
+    | ToggleCaseUF CaseUF
+    | ToggleCaseUFR CaseUFR
 
 
 randomIndexGenerator : List CommType -> Random.Generator Int
@@ -516,6 +614,82 @@ send msg =
         |> Task.perform identity
 
 
+isValidCaseUF : ToggledCasesUF -> CommUF -> Bool
+isValidCaseUF toggled_cases comm =
+    case comm.comm_type of
+        "4-Mover" ->
+            toggled_cases.four_mover
+
+        "U-Swap" ->
+            toggled_cases.u_swap
+
+        "E-Swap" ->
+            toggled_cases.e_swap
+
+        "S-Swap" ->
+            toggled_cases.s_swap
+
+        "M-Swap" ->
+            toggled_cases.m_swap
+
+        "Alg" ->
+            toggled_cases.alg
+
+        "F-Swap" ->
+            toggled_cases.f_swap
+
+        "S-Insert" ->
+            toggled_cases.s_insert
+
+        _ ->
+            let
+                _ =
+                    Debug.log "Unkown UF case type." comm
+            in
+            False
+
+
+isValidCaseUFR : ToggledCasesUFR -> CommUFR -> Bool
+isValidCaseUFR toggled_cases comm =
+    case comm.comm_type of
+        "U-Any / U-Any" ->
+            toggled_cases.u_any__u_any
+
+        "U-Top / D-Side" ->
+            toggled_cases.u_top__d_side
+
+        "U-Top / D-Bottom" ->
+            toggled_cases.u_top__d_bottom
+
+        "Special" ->
+            toggled_cases.special
+
+        "U-Side / D-Any" ->
+            toggled_cases.u_side__d_any
+
+        "LUF / D-Any" ->
+            toggled_cases.luf_d__any
+
+        "BUR / D-Any" ->
+            toggled_cases.bur__d_any
+
+        "D-Side / D-Side" ->
+            toggled_cases.d_side__d_side
+
+        "D-Side / D-Bottom" ->
+            toggled_cases.d_side__d_bottom
+
+        "D-Bottom / D-Bottom" ->
+            toggled_cases.d_bottom__d_bottom
+
+        _ ->
+            let
+                _ =
+                    Debug.log "Unkown UF case type." comm
+            in
+            False
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( msg, model ) of
@@ -530,11 +704,28 @@ update msg model =
 
         ( ToggleType type_to_toggle, Loaded state ) ->
             let
-                new_types =
-                    state.settings.toggled_types |> toggleType type_to_toggle
-
                 new_settings =
                     state.settings |> setToggledTypes (state.settings.toggled_types |> toggleType type_to_toggle)
+            in
+            ( Loaded state
+                |> setSettings new_settings
+            , send GenerateCurrentComms
+            )
+
+        ( ToggleCaseUF case_to_toggle, Loaded state ) ->
+            let
+                new_settings =
+                    state.settings |> setToggledCasesUF (state.settings.toggled_cases_uf |> toggleCasesUF case_to_toggle)
+            in
+            ( Loaded state
+                |> setSettings new_settings
+            , send GenerateCurrentComms
+            )
+
+        ( ToggleCaseUFR case_to_toggle, Loaded state ) ->
+            let
+                new_settings =
+                    state.settings |> setToggledCasesUFR (state.settings.toggled_cases_ufr |> toggleCasesUFR case_to_toggle)
             in
             ( Loaded state
                 |> setSettings new_settings
@@ -546,12 +737,12 @@ update msg model =
                 new_comms =
                     List.concat
                         [ if state.settings.toggled_types.uf then
-                            List.map toCommTypeUF state.data.uf
+                            List.map toCommTypeUF (List.filter (isValidCaseUF state.settings.toggled_cases_uf) state.data.uf)
 
                           else
                             []
                         , if state.settings.toggled_types.ufr then
-                            List.map toCommTypeUFR state.data.ufr
+                            List.map toCommTypeUFR (List.filter (isValidCaseUFR state.settings.toggled_cases_ufr) state.data.ufr)
 
                           else
                             []
@@ -649,6 +840,38 @@ viewToggleButton content type_to_toggle toggled =
                 "bg-emerald-600"
             )
         , onClick (ToggleType type_to_toggle)
+        ]
+        [ text content ]
+
+
+viewToggleCaseUFButton : String -> CaseUF -> Bool -> Html Msg
+viewToggleCaseUFButton content case_to_toggle toggled =
+    button
+        [ class "ml-auto hover:bg-emerald-700 ease-in-out duration-75 text-white font-bold py-2 px-4 rounded w-1/2 mb-2"
+        , class
+            (if toggled == False then
+                "bg-emerald-400"
+
+             else
+                "bg-emerald-600"
+            )
+        , onClick (ToggleCaseUF case_to_toggle)
+        ]
+        [ text content ]
+
+
+viewToggleCaseUFRButton : String -> CaseUFR -> Bool -> Html Msg
+viewToggleCaseUFRButton content case_to_toggle toggled =
+    button
+        [ class "ml-auto hover:bg-emerald-700 ease-in-out duration-75 text-white font-bold py-2 px-4 rounded w-1/2 mb-2"
+        , class
+            (if toggled == False then
+                "bg-emerald-400"
+
+             else
+                "bg-emerald-600"
+            )
+        , onClick (ToggleCaseUFR case_to_toggle)
         ]
         [ text content ]
 
@@ -783,6 +1006,46 @@ view model =
                                     , onClick GenerateNewComm
                                     ]
                                     [ text "Skip" ]
+                                , div
+                                    [ class
+                                        (if state.settings.toggled_types.uf then
+                                            "flex flex-col"
+
+                                         else
+                                            "hidden sm:hidden md:hidden lg:hidden xl:hidden"
+                                        )
+                                    , class "mt-4"
+                                    ]
+                                    [ viewToggleCaseUFButton "4-Mover" FourMover state.settings.toggled_cases_uf.four_mover
+                                    , viewToggleCaseUFButton "U-Swap" USwap state.settings.toggled_cases_uf.u_swap
+                                    , viewToggleCaseUFButton "E-Swap" ESwap state.settings.toggled_cases_uf.e_swap
+                                    , viewToggleCaseUFButton "S-Swap" SSwap state.settings.toggled_cases_uf.s_swap
+                                    , viewToggleCaseUFButton "M-Swap" MSwap state.settings.toggled_cases_uf.m_swap
+                                    , viewToggleCaseUFButton "F-Swap" FSwap state.settings.toggled_cases_uf.f_swap
+                                    , viewToggleCaseUFButton "S-Insert" SInsert state.settings.toggled_cases_uf.s_insert
+                                    , viewToggleCaseUFButton "Alg" Alg state.settings.toggled_cases_uf.alg
+                                    ]
+                                , div
+                                    [ class
+                                        (if state.settings.toggled_types.ufr then
+                                            "flex flex-col"
+
+                                         else
+                                            "hidden sm:hidden md:hidden lg:hidden xl:hidden"
+                                        )
+                                    , class "mt-4"
+                                    ]
+                                    [ viewToggleCaseUFRButton "U-Any / U-Any" UAnyUAny state.settings.toggled_cases_ufr.u_any__u_any
+                                    , viewToggleCaseUFRButton "U-Top / D-Side" UTopDSide state.settings.toggled_cases_ufr.u_top__d_side
+                                    , viewToggleCaseUFRButton "U-Top / D-Bottom" UTopDBottom state.settings.toggled_cases_ufr.u_top__d_bottom
+                                    , viewToggleCaseUFRButton "U-Side / D-Any" USideDAny state.settings.toggled_cases_ufr.u_side__d_any
+                                    , viewToggleCaseUFRButton "D-Side / D-Side" DSideDSide state.settings.toggled_cases_ufr.d_side__d_side
+                                    , viewToggleCaseUFRButton "D-Side / D-Bottom" DSideDBottom state.settings.toggled_cases_ufr.d_side__d_bottom
+                                    , viewToggleCaseUFRButton "D-Bottom / D-Bottom" DBottomDBottom state.settings.toggled_cases_ufr.d_bottom__d_bottom
+                                    , viewToggleCaseUFRButton "LUF / D-Any" LUFDAny state.settings.toggled_cases_ufr.luf_d__any
+                                    , viewToggleCaseUFRButton "BUR / D-Any" BURDAny state.settings.toggled_cases_ufr.bur__d_any
+                                    , viewToggleCaseUFRButton "Special" Special state.settings.toggled_cases_ufr.special
+                                    ]
                                 ]
                             , div [ class "h-full w-4/6 bg-cyan-200 rounded-lg drop-shadow-xl m-2" ]
                                 [ div [ class "h-full w-full text-center p-6 text-white text-2xl font-bold", id "twisty-player-container" ]
